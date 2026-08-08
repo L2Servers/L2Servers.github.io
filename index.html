@@ -397,7 +397,22 @@
 
     <script>
     /* ===== ЯЗЫК ПО УМОЛЧАНИЮ ===== */
-    let currentLang = 'en';
+   // let currentLang = 'en';
+        const supportedLangs = ['en','ru','el','pt-br','lt','es','tr','sl','de'];
+let currentLang = 'en';
+
+(function detectLang() {
+    const navLangs = navigator.languages || [navigator.language || 'en'];
+    for (const lang of navLangs) {
+        const code = lang.toLowerCase();
+        /* Точное совпадение: "ru-RU" → "ru", "pt-BR" → "pt-br" */
+        const exact = code.replace(/-[a-z]+$/, m => m.toLowerCase());
+        if (supportedLangs.includes(exact)) { currentLang = exact; return; }
+        /* Только код языка без региона: "ru-RU" → "ru" */
+        const base = code.split('-')[0];
+        if (supportedLangs.includes(base)) { currentLang = base; return; }
+    }
+})();
 
     /* ===== ПЕРЕВОДЫ UI ===== */
     const i18n = {
